@@ -1,26 +1,26 @@
 {
   "envId": "medifamily-prod-6g806k2004ec9f6b",
-  "functionRoot": "./functions",
+  "functionRootPath": "./functions",
   "functions": [
     {
       "name": "auth",
-      "runtime": "Nodejs18.15",
+      "runtime": "nodejs18.15",
       "timeout": 10,
-      "memorySize": 256,
+      "memory": 256,
       "triggers": []
     },
     {
       "name": "med-plan",
-      "runtime": "Nodejs18.15",
+      "runtime": "nodejs18.15",
       "timeout": 10,
-      "memorySize": 256,
+      "memory": 256,
       "triggers": []
     },
     {
       "name": "reminder",
-      "runtime": "Nodejs18.15",
+      "runtime": "nodejs18.15",
       "timeout": 60,
-      "memorySize": 512,
+      "memory": 512,
       "triggers": [
         {
           "name": "every-minute",
@@ -31,16 +31,16 @@
     },
     {
       "name": "call",
-      "runtime": "Nodejs18.15",
+      "runtime": "nodejs18.15",
       "timeout": 180,
-      "memorySize": 512,
+      "memory": 512,
       "triggers": []
     },
     {
       "name": "record",
-      "runtime": "Nodejs18.15",
+      "runtime": "nodejs18.15",
       "timeout": 10,
-      "memorySize": 256,
+      "memory": 256,
       "triggers": []
     }
   ]
