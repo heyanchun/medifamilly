@@ -4,21 +4,21 @@
   "functions": [
     {
       "name": "auth",
-      "runtime": "nodejs18.15",
+      "runtime": "Nodejs18.15",
       "timeout": 10,
       "memory": 256,
       "triggers": []
     },
     {
       "name": "med-plan",
-      "runtime": "nodejs18.15",
+      "runtime": "Nodejs18.15",
       "timeout": 10,
       "memory": 256,
       "triggers": []
     },
     {
       "name": "reminder",
-      "runtime": "nodejs18.15",
+      "runtime": "Nodejs18.15",
       "timeout": 60,
       "memory": 512,
       "triggers": [
@@ -31,14 +31,14 @@
     },
     {
       "name": "call",
-      "runtime": "nodejs18.15",
+      "runtime": "Nodejs18.15",
       "timeout": 180,
       "memory": 512,
       "triggers": []
     },
     {
       "name": "record",
-      "runtime": "nodejs18.15",
+      "runtime": "Nodejs18.15",
       "timeout": 10,
       "memory": 256,
       "triggers": []
