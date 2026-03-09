@@ -29,6 +29,7 @@ dependencies:
   # 音频录制
   record: ^5.1.2
   audioplayers: ^6.0.0
+  path_provider: ^2.1.2
 
   # UI 组件
   cupertino_icons: ^1.0.6

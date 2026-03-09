@@ -8,6 +8,7 @@ import '../../../core/constants.dart';
 import '../../../data/services/api_service.dart';
 import '../child/home/child_home_page.dart';
 import '../elder/home/elder_home_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -169,7 +170,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Text('还没有账号？', style: TextStyle(color: AppTheme.textSecondary)),
                         TextButton(
                           onPressed: () {
-                            // TODO: 跳转注册页
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const RegisterPage()),
+                            );
                           },
                           child: const Text('立即注册', style: TextStyle(color: AppTheme.primary)),
                         ),
