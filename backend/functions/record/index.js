@@ -7,14 +7,17 @@ const { ok, fail, ERRORS } = require('./shared/response');
 const { verifyToken } = require('./shared/auth-middleware');
 
 exports.main = async (event) => {
-  const { path, httpMethod, body: rawBody } = event;
-  const body = typeof rawBody === 'string' ? JSON.parse(rawBody || '{}') : (rawBody || {});
+  // 去掉 HTTP 访问服务路径前缀 /record
+  const rawPath = (event.path || '').replace(/^\/record/, '') || '/';
+  const path = rawPath || '/';
+  const httpMethod = event.httpMethod;
+  const body = typeof event.body === 'string' ? JSON.parse(event.body || '{}') : (event.body || {});
   const query = event.queryStringParameters || {};
 
   try {
-    if (path === '/record/confirm'  && httpMethod === 'POST') return await confirmMed(event, body);
-    if (path === '/record/logs'     && httpMethod === 'GET')  return await getLogs(event, query);
-    if (path.startsWith('/record/call/') && httpMethod === 'GET') return await getCallRecord(event, path.split('/')[3]);
+    if (path === '/confirm'  && httpMethod === 'POST') return await confirmMed(event, body);
+    if (path === '/logs'     && httpMethod === 'GET')  return await getLogs(event, query);
+    if (path.startsWith('/call/') && httpMethod === 'GET') return await getCallRecord(event, path.split('/')[2]);
     if (path === '/voice/upload'    && httpMethod === 'POST') return await uploadVoice(event, body);
     if (path === '/voice/status'    && httpMethod === 'GET')  return await getVoiceStatus(event);
     return fail('接口不存在', 404);

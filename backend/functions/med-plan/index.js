@@ -11,15 +11,18 @@ const { recognizeFile } = require('./shared/asr');
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
 exports.main = async (event) => {
-  const { path, httpMethod, body: rawBody } = event;
-  const body = typeof rawBody === 'string' ? JSON.parse(rawBody || '{}') : (rawBody || {});
+  // 去掉 HTTP 访问服务路径前缀 /med-plan
+  const rawPath = (event.path || '').replace(/^\/med-plan/, '') || '/';
+  const path = rawPath || '/';
+  const httpMethod = event.httpMethod;
+  const body = typeof event.body === 'string' ? JSON.parse(event.body || '{}') : (event.body || {});
 
   try {
-    if (path === '/med-plan' && httpMethod === 'POST') return await createPlan(event, body);
-    if (path === '/med-plan' && httpMethod === 'GET')  return await listPlans(event, event.queryStringParameters || {});
-    if (path.match(/^\/med-plan\/\w+$/) && httpMethod === 'PUT')    return await updatePlan(event, body, path.split('/')[2]);
-    if (path.match(/^\/med-plan\/\w+$/) && httpMethod === 'DELETE') return await deletePlan(event, path.split('/')[2]);
-    if (path === '/med-plan/parse-voice' && httpMethod === 'POST') return await parseVoice(event, body);
+    if (path === '/parse-voice' && httpMethod === 'POST') return await parseVoice(event, body);
+    if (path === '/' && httpMethod === 'POST') return await createPlan(event, body);
+    if (path === '/' && httpMethod === 'GET')  return await listPlans(event, event.queryStringParameters || {});
+    if (path.match(/^\/\w+$/) && httpMethod === 'PUT')    return await updatePlan(event, body, path.slice(1));
+    if (path.match(/^\/\w+$/) && httpMethod === 'DELETE') return await deletePlan(event, path.slice(1));
     return fail('接口不存在', 404);
   } catch (e) {
     console.error('[med-plan] error:', e);

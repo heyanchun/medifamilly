@@ -11,12 +11,15 @@ const { sendVoiceNotification } = require('./shared/vms');
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
 exports.main = async (event) => {
-  const { path, httpMethod, body: rawBody } = event;
-  const body = typeof rawBody === 'string' ? JSON.parse(rawBody || '{}') : (rawBody || {});
+  // 去掉 HTTP 访问服务路径前缀 /call
+  const rawPath = (event.path || '').replace(/^\/call/, '') || '/';
+  const path = rawPath || '/';
+  const httpMethod = event.httpMethod;
+  const body = typeof event.body === 'string' ? JSON.parse(event.body || '{}') : (event.body || {});
 
   if (body.action === 'initiateCall') return await initiateCall(body.logId);
-  if (path === '/call/vms-callback') return await vmsCallback(body);
-  if (path === '/call/records' && httpMethod === 'GET') return await listCallRecords(event, event.queryStringParameters || {});
+  if (path === '/vms-callback') return await vmsCallback(body);
+  if (path === '/records' && httpMethod === 'GET') return await listCallRecords(event, event.queryStringParameters || {});
 
   return fail('接口不存在', 404);
 };

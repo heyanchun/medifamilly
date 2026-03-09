@@ -4,10 +4,10 @@
 class AppConstants {
   AppConstants._();
 
-  // API
+  // API — CloudBase HTTP 访问服务 base URL
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://your-env-id.ap-shanghai.tcb-api.tencentcloudapi.com',
+    defaultValue: 'https://medifamily-prod-6g806k2004ec9f6b-1306190286.ap-shanghai.app.tcloudbase.com',
   );
 
   // 提醒升级时间（分钟）

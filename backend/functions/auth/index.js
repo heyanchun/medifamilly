@@ -13,17 +13,20 @@ const JWT_EXPIRES = '30d';
 
 // 路由分发
 exports.main = async (event) => {
-  const { path, httpMethod, body: rawBody } = event;
-  const body = typeof rawBody === 'string' ? JSON.parse(rawBody || '{}') : (rawBody || {});
+  // HTTP 访问服务会在 path 前拼上触发器路径前缀（如 /auth），统一去掉
+  const rawPath = (event.path || '').replace(/^\/auth/, '') || '/';
+  const path = rawPath || '/';
+  const httpMethod = event.httpMethod;
+  const body = typeof event.body === 'string' ? JSON.parse(event.body || '{}') : (event.body || {});
 
   try {
-    if (path === '/auth/register' && httpMethod === 'POST') return await register(body);
-    if (path === '/auth/login'    && httpMethod === 'POST') return await login(body);
-    if (path === '/auth/binding/invite'   && httpMethod === 'POST') return await invite(event, body);
-    if (path === '/auth/binding/confirm'  && httpMethod === 'POST') return await confirmBinding(event, body);
-    if (path === '/auth/binding/pending'  && httpMethod === 'GET')  return await getPendingBinding(event);
-    if (path === '/auth/bindings'         && httpMethod === 'GET')  return await getBindings(event);
-    if (path === '/auth/child-profile'    && httpMethod === 'PUT')  return await updateChildProfile(event, body);
+    if (path === '/register' && httpMethod === 'POST') return await register(body);
+    if (path === '/login'    && httpMethod === 'POST') return await login(body);
+    if (path === '/binding/invite'   && httpMethod === 'POST') return await invite(event, body);
+    if (path === '/binding/confirm'  && httpMethod === 'POST') return await confirmBinding(event, body);
+    if (path === '/binding/pending'  && httpMethod === 'GET')  return await getPendingBinding(event);
+    if (path === '/bindings'         && httpMethod === 'GET')  return await getBindings(event);
+    if (path === '/child-profile'    && httpMethod === 'PUT')  return await updateChildProfile(event, body);
     return fail('接口不存在', 404);
   } catch (e) {
     console.error('[auth] error:', e);

@@ -31,24 +31,30 @@ class _ChildHomePageState extends ConsumerState<ChildHomePage> {
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    // TODO: 实现 bindings 列表接口
-    // 暂时 mock 一条数据
-    setState(() {
-      _elders = [
-        {'bindingId': 'b1', 'elderId': 'e1', 'elderNickname': '妈', 'elderName': '王桂芳'},
-      ];
-      _loading = false;
-    });
+    try {
+      final bindings = await _api.getBindings();
+      setState(() {
+        _elders = bindings.cast<Map<String, dynamic>>();
+        _loading = false;
+      });
 
-    // 加载各长辈今日依从率
-    for (final elder in _elders) {
-      final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-      try {
-        final stats = await _api.getLogs(elderId: elder['elderId'], date: today);
-        setState(() {
-          _elderStats[elder['elderId']] = stats['stats'] as Map<String, dynamic>;
-        });
-      } catch (_) {}
+      // 加载各长辈今日依从率
+      for (final elder in _elders) {
+        final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        try {
+          final result = await _api.getLogs(elderId: elder['elderId'] as String?, date: today);
+          setState(() {
+            _elderStats[elder['elderId'] as String] = result['stats'] as Map<String, dynamic>;
+          });
+        } catch (_) {}
+      }
+    } catch (e) {
+      setState(() => _loading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('加载失败：$e')),
+        );
+      }
     }
   }
 
