@@ -2,8 +2,8 @@
  * functions/auth/index.js
  * 处理注册、登录、绑定邀请与确认、子女画像更新
  */
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { hash: hashPwd, compare: comparePwd } = require('./shared/hash');
+const { sign: jwtSign } = require('./shared/jwt');
 const { db, COLLECTIONS } = require('./shared/db');
 const { ok, fail, ERRORS } = require('./shared/response');
 const { verifyToken } = require('./shared/auth-middleware');
@@ -40,7 +40,7 @@ async function register({ phone, password, role, name }) {
   const existing = await db.collection(COLLECTIONS.USERS).where({ phone }).get();
   if (existing.data.length > 0) return fail('手机号已注册', 409);
 
-  const hash = await bcrypt.hash(password, 10);
+  const hash = await hashPwd(password);
   const result = await db.collection(COLLECTIONS.USERS).add({
     phone,
     password: hash,
@@ -50,7 +50,7 @@ async function register({ phone, password, role, name }) {
   });
 
   const userId = result.id;
-  const token = jwt.sign({ userId, role, phone }, JWT_SECRET, { expiresIn: JWT_EXPIRES });
+  const token = jwtSign({ userId, role, phone }, JWT_SECRET, { expiresIn: JWT_EXPIRES });
   return ok({ userId, token, role, name });
 }
 
@@ -62,10 +62,10 @@ async function login({ phone, password }) {
   if (res.data.length === 0) return fail('手机号未注册', 404);
 
   const user = res.data[0];
-  const match = await bcrypt.compare(password, user.password);
+  const match = await comparePwd(password, user.password);
   if (!match) return fail('密码错误', 401);
 
-  const token = jwt.sign(
+  const token = jwtSign(
     { userId: user._id, role: user.role, phone: user.phone },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES }
