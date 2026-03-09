@@ -1,0 +1,11 @@
+name: record_linux
+version: 0.7.2
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+flutter:
+  plugin:
+    implements: record
+    platforms:
+      linux:
+        dartPluginClass: RecordLinux
+        fileName: record_linux.dart

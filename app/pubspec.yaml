@@ -28,6 +28,7 @@ dependencies:
 
   # 音频录制
   record: ^5.1.2
+  record_android: ^1.2.1
   audioplayers: ^6.0.0
   path_provider: ^2.1.2
 
@@ -62,4 +63,7 @@ flutter:
       fonts:
         - asset: assets/fonts/NotoSansSC-Regular.ttf
         - asset: assets/fonts/NotoSansSC-Bold.ttf
-          weight: 700
+
+dependency_overrides:
+  record_linux:
+    path: ../record_linux_stub

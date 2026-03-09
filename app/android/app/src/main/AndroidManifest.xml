@@ -33,7 +33,6 @@
     <application
         android:name="${applicationName}"
         android:label="亲声药铃"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         android:allowBackup="false"
@@ -72,7 +71,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-        <!-- TPNS 应用配置 -->
+        <!-- TPNS 应用配置（MVP 阶段暂未集成，后续开启）-->
+        <!--
         <meta-data
             android:name="XG_V3_ACCESS_ID"
             android:value="1500045920" />
@@ -80,7 +80,6 @@
             android:name="XG_V3_ACCESS_KEY"
             android:value="${tpnsAccessKey}" />
 
-        <!-- TPNS 消息接收器 -->
         <receiver
             android:name=".TPNSReceiver"
             android:exported="true">
@@ -92,7 +91,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- 开机广播 -->
         <receiver
             android:name="com.tencent.android.tpush.BootReceiver"
             android:exported="false">
@@ -100,6 +98,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        -->
 
     </application>
 </manifest>
