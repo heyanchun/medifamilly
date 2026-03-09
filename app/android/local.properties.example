@@ -1,0 +1,10 @@
+# local.properties - 敏感配置，勿提交到 Git
+# 已加入 .gitignore
+
+# Android SDK 路径（按本机实际路径修改）
+sdk.dir=/path/to/Android/Sdk
+flutter.sdk=/path/to/flutter
+
+# TPNS 配置
+tpns.accessId=1500045920
+tpns.accessKey=ACYWTEAJ0VMC

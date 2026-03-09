@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.medifamily.app">
+
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 麦克风（语音录入用药计划）-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- 存储（录音临时文件）-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- Push 通知（Android 13+）-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- 震动（提醒通知）-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 开机自启（保持 Push 接收）-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- 保持唤醒（处理推送）-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- TPNS 厂商通道权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <application
+        android:name="${applicationName}"
+        android:label="亲声药铃"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+
+            <!-- Flutter 启动 Splash -->
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Push 通知点击跳转 Deep Link -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="medifamily" />
+            </intent-filter>
+        </activity>
+
+        <!-- Flutter v2 嵌入声明（必须，否则 flutter build 报 v1 embedding 错误）-->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+
+        <!-- TPNS 应用配置 -->
+        <meta-data
+            android:name="XG_V3_ACCESS_ID"
+            android:value="1500045920" />
+        <meta-data
+            android:name="XG_V3_ACCESS_KEY"
+            android:value="${tpnsAccessKey}" />
+
+        <!-- TPNS 消息接收器 -->
+        <receiver
+            android:name=".TPNSReceiver"
+            android:exported="true">
+            <intent-filter android:priority="0x7fffffff">
+                <action android:name="com.tencent.android.xg.vip.action.PUSH_FORWARD" />
+                <action android:name="com.tencent.android.xg.vip.action.FEEDBACK" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 开机广播 -->
+        <receiver
+            android:name="com.tencent.android.tpush.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>

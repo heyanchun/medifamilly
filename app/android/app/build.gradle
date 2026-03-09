@@ -1,0 +1,100 @@
+// app/build.gradle — Flutter Android 应用模块
+// 使用传统 apply 方式引入 Flutter 插件（兼容 Gradle 8 + Flutter 3.x）
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
+
+// TPNS 密钥（通过 local.properties 注入，不提交到版本库）
+def tpnsAccessId  = localProperties.getProperty('tpns.accessId')  ?: ''
+def tpnsAccessKey = localProperties.getProperty('tpns.accessKey') ?: ''
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    namespace "com.medifamily.app"
+    compileSdkVersion 34
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    defaultConfig {
+        applicationId "com.medifamily.app"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+
+        // 将 TPNS 密钥注入 BuildConfig
+        buildConfigField "String", "TPNS_ACCESS_ID",  "\"${tpnsAccessId}\""
+        buildConfigField "String", "TPNS_ACCESS_KEY", "\"${tpnsAccessKey}\""
+    }
+
+    signingConfigs {
+        release {
+            // 正式签名从 keystore.properties 读取，不提交 keystore 到版本库
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                storeFile     file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias      keystoreProperties['keyAlias']
+                keyPassword   keystoreProperties['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            buildConfigField "boolean", "DEBUG", "true"
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "DEBUG", "false"
+            // signingConfig signingConfigs.release  // 发布时取消注释
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    // 腾讯移动推送 TPNS（纯国内厂商通道，无 Firebase 依赖）
+    implementation 'com.tencent.tpns:tpns:1.3.8.0-release'
+    // 厂商通道（按需开启，覆盖国内主流机型）
+    implementation 'com.tencent.tpns:huawei:1.3.8.0-release'   // 华为
+    implementation 'com.tencent.tpns:xiaomi:1.3.8.0-release'   // 小米
+    implementation 'com.tencent.tpns:oppo:1.3.8.0-release'     // OPPO
+    implementation 'com.tencent.tpns:vivo:1.3.8.0-release'     // vivo
+    implementation 'com.tencent.tpns:honor:1.3.8.0-release'    // 荣耀
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

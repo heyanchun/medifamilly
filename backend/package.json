@@ -1,0 +1,25 @@
+{
+  "name": "medifamily-backend",
+  "version": "1.0.0",
+  "description": "亲声药铃 CloudBase 后端",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "tencentcloud-sdk-nodejs": "^4.0.900"
+  },
+  "scripts": {
+    "deploy": "tcb fn deploy --all",
+    "deploy:auth": "tcb fn deploy --name auth",
+    "deploy:med-plan": "tcb fn deploy --name med-plan",
+    "deploy:reminder": "tcb fn deploy --name reminder",
+    "deploy:call": "tcb fn deploy --name call",
+    "deploy:record": "tcb fn deploy --name record"
+  },
+  "devDependencies": {
+    "@cloudbase/cli": "^2.6.0"
+  }
+}
