@@ -3,10 +3,10 @@
  * 药品计划 CRUD + 语音解析（调用腾讯云 ASR + DeepSeek 提取结构化信息）
  */
 const https = require('https');
-const { db, COLLECTIONS } = require('../../shared/db');
-const { ok, fail, ERRORS } = require('../../shared/response');
-const { verifyToken } = require('../../shared/auth-middleware');
-const { recognizeFile } = require('../../shared/asr');
+const { db, COLLECTIONS } = require('./shared/db');
+const { ok, fail, ERRORS } = require('./shared/response');
+const { verifyToken } = require('./shared/auth-middleware');
+const { recognizeFile } = require('./shared/asr');
 
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 

@@ -3,12 +3,12 @@
  * PSTN 电话外呼 + DeepSeek 实时对话桥接
  */
 const https = require('https');
-const { db, COLLECTIONS } = require('../../shared/db');
-const { ERRORS, ok, fail } = require('../../shared/response');
-const { verifyToken } = require('../../shared/auth-middleware');
-const { sendVoiceNotification } = require('../../shared/vms');
-const { synthesize } = require('../../shared/voice');
-const { uploadBuffer, getTempUrl } = require('../../shared/cos');
+const { db, COLLECTIONS } = require('./shared/db');
+const { ERRORS, ok, fail } = require('./shared/response');
+const { verifyToken } = require('./shared/auth-middleware');
+const { sendVoiceNotification } = require('./shared/vms');
+const { synthesize } = require('./shared/voice');
+const { uploadBuffer, getTempUrl } = require('./shared/cos');
 
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 const CALL_MAX_SECONDS = 180;

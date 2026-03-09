@@ -2,8 +2,8 @@
  * functions/reminder/index.js
  * 定时触发器（每分钟）：检查到期提醒，执行三级升级链路
  */
-const { db, COLLECTIONS } = require('../../shared/db');
-const { pushToAccount } = require('../../shared/tpns');
+const { db, COLLECTIONS } = require('./shared/db');
+const { pushToAccount } = require('./shared/tpns');
 
 const ESCALATION_MINUTES = 30; // 每级升级等待时间
 
@@ -117,7 +117,7 @@ async function sendLevel1Push(plan, logId) {
 // 二级：发起 PSTN 电话（调用 call 云函数）
 async function escalateToCall(log) {
   try {
-    const { app } = require('../../shared/db');
+    const { app } = require('./shared/db');
     await app.callFunction({
       name: 'call',
       data: { action: 'initiateCall', logId: log._id },

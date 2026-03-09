@@ -4,9 +4,9 @@
  */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { db, COLLECTIONS } = require('../../shared/db');
-const { ok, fail, ERRORS } = require('../../shared/response');
-const { verifyToken } = require('../../shared/auth-middleware');
+const { db, COLLECTIONS } = require('./shared/db');
+const { ok, fail, ERRORS } = require('./shared/response');
+const { verifyToken } = require('./shared/auth-middleware');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES = '30d';

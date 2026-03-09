@@ -2,9 +2,9 @@
  * functions/record/index.js
  * 打卡确认、服药记录查询、声音上传状态
  */
-const { db, COLLECTIONS, app } = require('../../shared/db');
-const { ok, fail, ERRORS } = require('../../shared/response');
-const { verifyToken } = require('../../shared/auth-middleware');
+const { db, COLLECTIONS, app } = require('./shared/db');
+const { ok, fail, ERRORS } = require('./shared/response');
+const { verifyToken } = require('./shared/auth-middleware');
 
 const COS_BUCKET = process.env.COS_BUCKET;
 const COS_REGION = process.env.COS_REGION;
