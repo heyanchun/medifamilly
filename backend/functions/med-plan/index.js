@@ -97,9 +97,7 @@ async function createPlan(event, { bindingId, plans }) {
   if (!bindingId || !plans?.length) return ERRORS.INVALID_PARAMS('缺少 bindingId 或 plans');
 
   const _rawBinding = await db.collection(COLLECTIONS.BINDINGS).doc(bindingId).get();
-  console.log('[debug] rawBinding:', JSON.stringify(_rawBinding));
   const binding = docGet(_rawBinding);
-  console.log('[debug] binding:', JSON.stringify(binding), 'childId in token:', childId);
   if (!binding || binding.childId !== childId) return ERRORS.FORBIDDEN;
 
   const now = new Date();

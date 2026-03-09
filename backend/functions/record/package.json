@@ -1,4 +1,7 @@
 {
   "name": "medifamily-fn",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^3.18.0"
+  }
 }

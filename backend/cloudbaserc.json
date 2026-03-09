@@ -7,6 +7,18 @@
       "runtime": "Nodejs18.15",
       "timeout": 10,
       "memory": 256,
+      "installDependency": false,
+      "ignore": [".DS_Store", "*.log"],
+      "envVariables": {
+        "TCB_ENV_ID": "medifamily-prod-6g806k2004ec9f6b",
+        "JWT_SECRET": "12932b6c4b272903aa4d412d82597999d640d78f844269c196434ead8472040c",
+        "DEEPSEEK_API_KEY": "sk-979b8c5c42d349388d73787609806398",
+        "TPNS_ACCESS_ID": "1500045920",
+        "TPNS_SECRET_KEY": "0ecd7235fb98808f5c5ceefb6ba763eb",
+        "COS_BUCKET": "medifamily-prod-1306190286",
+        "COS_REGION": "ap-guangzhou",
+        "NODE_ENV": "production"
+      },
       "triggers": []
     },
     {
@@ -14,6 +26,18 @@
       "runtime": "Nodejs18.15",
       "timeout": 10,
       "memory": 256,
+      "installDependency": false,
+      "ignore": [".DS_Store", "*.log"],
+      "envVariables": {
+        "TCB_ENV_ID": "medifamily-prod-6g806k2004ec9f6b",
+        "JWT_SECRET": "12932b6c4b272903aa4d412d82597999d640d78f844269c196434ead8472040c",
+        "DEEPSEEK_API_KEY": "sk-979b8c5c42d349388d73787609806398",
+        "TPNS_ACCESS_ID": "1500045920",
+        "TPNS_SECRET_KEY": "0ecd7235fb98808f5c5ceefb6ba763eb",
+        "COS_BUCKET": "medifamily-prod-1306190286",
+        "COS_REGION": "ap-guangzhou",
+        "NODE_ENV": "production"
+      },
       "triggers": []
     },
     {
@@ -21,6 +45,18 @@
       "runtime": "Nodejs18.15",
       "timeout": 60,
       "memory": 512,
+      "installDependency": false,
+      "ignore": [".DS_Store", "*.log"],
+      "envVariables": {
+        "TCB_ENV_ID": "medifamily-prod-6g806k2004ec9f6b",
+        "JWT_SECRET": "12932b6c4b272903aa4d412d82597999d640d78f844269c196434ead8472040c",
+        "DEEPSEEK_API_KEY": "sk-979b8c5c42d349388d73787609806398",
+        "TPNS_ACCESS_ID": "1500045920",
+        "TPNS_SECRET_KEY": "0ecd7235fb98808f5c5ceefb6ba763eb",
+        "COS_BUCKET": "medifamily-prod-1306190286",
+        "COS_REGION": "ap-guangzhou",
+        "NODE_ENV": "production"
+      },
       "triggers": [
         {
           "name": "every-minute",
@@ -34,6 +70,18 @@
       "runtime": "Nodejs18.15",
       "timeout": 180,
       "memory": 512,
+      "installDependency": false,
+      "ignore": [".DS_Store", "*.log"],
+      "envVariables": {
+        "TCB_ENV_ID": "medifamily-prod-6g806k2004ec9f6b",
+        "JWT_SECRET": "12932b6c4b272903aa4d412d82597999d640d78f844269c196434ead8472040c",
+        "DEEPSEEK_API_KEY": "sk-979b8c5c42d349388d73787609806398",
+        "TPNS_ACCESS_ID": "1500045920",
+        "TPNS_SECRET_KEY": "0ecd7235fb98808f5c5ceefb6ba763eb",
+        "COS_BUCKET": "medifamily-prod-1306190286",
+        "COS_REGION": "ap-guangzhou",
+        "NODE_ENV": "production"
+      },
       "triggers": []
     },
     {
@@ -41,6 +89,18 @@
       "runtime": "Nodejs18.15",
       "timeout": 10,
       "memory": 256,
+      "installDependency": false,
+      "ignore": [".DS_Store", "*.log"],
+      "envVariables": {
+        "TCB_ENV_ID": "medifamily-prod-6g806k2004ec9f6b",
+        "JWT_SECRET": "12932b6c4b272903aa4d412d82597999d640d78f844269c196434ead8472040c",
+        "DEEPSEEK_API_KEY": "sk-979b8c5c42d349388d73787609806398",
+        "TPNS_ACCESS_ID": "1500045920",
+        "TPNS_SECRET_KEY": "0ecd7235fb98808f5c5ceefb6ba763eb",
+        "COS_BUCKET": "medifamily-prod-1306190286",
+        "COS_REGION": "ap-guangzhou",
+        "NODE_ENV": "production"
+      },
       "triggers": []
     }
   ]
