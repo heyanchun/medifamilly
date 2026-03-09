@@ -30,4 +30,26 @@ const COLLECTIONS = {
   CALL_RECORDS: 'call_records',
 };
 
-module.exports = { db, COLLECTIONS, app };
+/**
+ * docGet — 兼容 doc().get() 返回 data 为 array 或 object 两种情况
+ * CloudBase SDK 不同版本行为不一致，统一用此 helper
+ * @param {object} res — db.collection().doc().get() 的返回值
+ * @returns {object|null}
+ */
+function docGet(res) {
+  if (!res || res.data === undefined || res.data === null) return null;
+  if (Array.isArray(res.data)) return res.data[0] || null;
+  return res.data || null;
+}
+
+/**
+ * whereGet — 兼容 where().get() 返回 data 为 array 的情况
+ * @param {object} res — db.collection().where().get() 的返回值
+ * @returns {Array}
+ */
+function whereGet(res) {
+  if (!res || !res.data) return [];
+  return Array.isArray(res.data) ? res.data : [res.data];
+}
+
+module.exports = { db, COLLECTIONS, app, docGet, whereGet };

@@ -3,7 +3,7 @@
  * 药品计划 CRUD + 语音解析（调用腾讯云 ASR + DeepSeek 提取结构化信息）
  */
 const https = require('https');
-const { db, COLLECTIONS } = require('./shared/db');
+const { db, COLLECTIONS, docGet, whereGet } = require('./shared/db');
 const { ok, fail, ERRORS } = require('./shared/response');
 const { verifyToken } = require('./shared/auth-middleware');
 const { recognizeFile } = require('./shared/asr');
@@ -32,20 +32,9 @@ exports.main = async (event) => {
 async function parseVoice(event, { audioUrl }) {
   verifyToken(event);
   if (!audioUrl) return ERRORS.INVALID_PARAMS('缺少 audioUrl');
-
-  // Step 1: 调用腾讯云 ASR 识别语音文本
-  const transcript = await asrRecognize(audioUrl);
-
-  // Step 2: 调用 DeepSeek 提取结构化信息
+  const transcript = await recognizeFile(audioUrl);
   const parsed = await extractMedInfo(transcript);
-
   return ok({ transcript, parsed });
-}
-
-// 腾讯云 ASR 一句话识别（简化版，生产需接入完整鉴权）
-async function asrRecognize(audioUrl) {
-  // 使用 shared/asr.js 统一封装
-  return await recognizeFile(audioUrl);
 }
 
 // DeepSeek 提取结构化药品信息
@@ -107,9 +96,11 @@ async function createPlan(event, { bindingId, plans }) {
   const { userId: childId } = verifyToken(event);
   if (!bindingId || !plans?.length) return ERRORS.INVALID_PARAMS('缺少 bindingId 或 plans');
 
-  // 验证 binding 属于当前子女
-  const bindingRes = await db.collection(COLLECTIONS.BINDINGS).doc(bindingId).get();
-  if (!bindingRes.data || bindingRes.data.childId !== childId) return ERRORS.FORBIDDEN;
+  const _rawBinding = await db.collection(COLLECTIONS.BINDINGS).doc(bindingId).get();
+  console.log('[debug] rawBinding:', JSON.stringify(_rawBinding));
+  const binding = docGet(_rawBinding);
+  console.log('[debug] binding:', JSON.stringify(binding), 'childId in token:', childId);
+  if (!binding || binding.childId !== childId) return ERRORS.FORBIDDEN;
 
   const now = new Date();
   const results = [];
@@ -122,7 +113,7 @@ async function createPlan(event, { bindingId, plans }) {
 
     const result = await db.collection(COLLECTIONS.MED_PLANS).add({
       bindingId,
-      elderId: bindingRes.data.elderId,
+      elderId: binding.elderId,
       childId,
       medName,
       frequency: frequency || timeSlots?.length || 1,
@@ -150,14 +141,14 @@ async function listPlans(event, { elderId, active }) {
 
   const res = await db.collection(COLLECTIONS.MED_PLANS).where(query)
     .orderBy('createdAt', 'desc').get();
-  return ok(res.data);
+  return ok(whereGet(res));
 }
 
 // ── 更新计划 ─────────────────────────────────────────────────────
 async function updatePlan(event, body, planId) {
   const { userId: childId } = verifyToken(event);
-  const planRes = await db.collection(COLLECTIONS.MED_PLANS).doc(planId).get();
-  if (!planRes.data || planRes.data.childId !== childId) return ERRORS.FORBIDDEN;
+  const plan = docGet(await db.collection(COLLECTIONS.MED_PLANS).doc(planId).get());
+  if (!plan || plan.childId !== childId) return ERRORS.FORBIDDEN;
 
   const allowedFields = ['medName', 'frequency', 'timeSlots', 'dosage', 'mealTiming', 'durationDays', 'active'];
   const update = {};
@@ -173,8 +164,8 @@ async function updatePlan(event, body, planId) {
 // ── 停用计划 ─────────────────────────────────────────────────────
 async function deletePlan(event, planId) {
   const { userId: childId } = verifyToken(event);
-  const planRes = await db.collection(COLLECTIONS.MED_PLANS).doc(planId).get();
-  if (!planRes.data || planRes.data.childId !== childId) return ERRORS.FORBIDDEN;
+  const plan = docGet(await db.collection(COLLECTIONS.MED_PLANS).doc(planId).get());
+  if (!plan || plan.childId !== childId) return ERRORS.FORBIDDEN;
 
   await db.collection(COLLECTIONS.MED_PLANS).doc(planId).update({ active: false, updatedAt: new Date() });
   return ok({ planId, status: 'deactivated' });
