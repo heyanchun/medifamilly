@@ -111,9 +111,10 @@ async function confirmBinding(event, { bindingId }) {
   if (!bindingId) return ERRORS.INVALID_PARAMS('缺少 bindingId');
 
   const bindingRes = await db.collection(COLLECTIONS.BINDINGS).doc(bindingId).get();
-  if (!bindingRes.data) return ERRORS.NOT_FOUND;
+  // doc().get() 在不同版本可能返回 data: object 或 data: [array]，兼容两种
+  const binding = Array.isArray(bindingRes.data) ? bindingRes.data[0] : bindingRes.data;
+  if (!binding) return ERRORS.NOT_FOUND;
 
-  const binding = bindingRes.data;
   if (binding.elderId !== elderId) return ERRORS.FORBIDDEN;
   if (binding.status !== 'pending') return fail('邀请状态异常', 400);
 
@@ -134,7 +135,8 @@ async function getPendingBinding(event) {
   // 附带子女姓名
   const binding = res.data[0];
   const childRes = await db.collection(COLLECTIONS.USERS).doc(binding.childId).get();
-  return ok({ ...binding, childName: childRes.data?.name || '您的家人' });
+  const childData = Array.isArray(childRes.data) ? childRes.data[0] : childRes.data;
+  return ok({ ...binding, childName: childData?.name || '您的家人' });
 }
 
 // ── 子女查询已绑定长辈列表 ────────────────────────────────────────
@@ -147,7 +149,8 @@ async function getBindings(event) {
   // 附带长辈姓名
   const bindings = await Promise.all(res.data.map(async (b) => {
     const elderRes = await db.collection(COLLECTIONS.USERS).doc(b.elderId).get();
-    return { ...b, elderName: elderRes.data?.name || '' };
+    const elderData = Array.isArray(elderRes.data) ? elderRes.data[0] : elderRes.data;
+    return { ...b, elderName: elderData?.name || '' };
   }));
 
   return ok(bindings);
