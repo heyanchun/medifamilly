@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390px">
+<title>亲声药铃 UI Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'PingFang SC', sans-serif; background: #f0f0f5; display: flex; gap: 24px; padding: 24px; justify-content: center; flex-wrap: wrap; }
+  .phone { width: 390px; height: 844px; background: #fff; border-radius: 40px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: 8px solid #1a1a1a; position: relative; flex-shrink: 0; }
+  .phone-label { text-align: center; font-size: 13px; color: #666; margin-top: 10px; font-weight: 600; }
+  .status-bar { height: 44px; background: inherit; display: flex; align-items: center; padding: 0 20px; justify-content: space-between; font-size: 12px; font-weight: 600; }
+  /* Colors */
+  :root { --primary: #4CAF82; --primary-dark: #388E5E; --primary-light: #E8F5EE; --surface: #fff; --bg: #F5F7FA; --text: #1A2336; --text2: #637080; --hint: #A8B4BE; --divider: #EDF0F3; --success: #34C759; --warning: #FF9500; }
+
+  /* ── 登录页 ── */
+  .login-page { background: var(--bg); height: 100%; display: flex; flex-direction: column; }
+  .login-hero { background: linear-gradient(160deg, var(--primary), var(--primary-dark)); padding: 60px 32px 48px; text-align: center; }
+  .login-hero .app-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 24px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .login-hero h1 { color: #fff; font-size: 26px; font-weight: 700; }
+  .login-hero p { color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 6px; }
+  .login-form { padding: 32px 24px; flex: 1; }
+  .input-group { margin-bottom: 16px; }
+  .input-group label { font-size: 13px; color: var(--text2); margin-bottom: 6px; display: block; }
+  .input-group input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--divider); border-radius: 14px; font-size: 16px; color: var(--text); background: #fff; outline: none; }
+  .btn-primary { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 16px; font-size: 17px; font-weight: 600; margin-top: 8px; cursor: pointer; }
+  .link-text { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text2); }
+  .link-text span { color: var(--primary); font-weight: 600; }
+
+  /* ── 子女首页 ── */
+  .child-home { background: var(--bg); height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .appbar { height: 56px; background: #fff; display: flex; align-items: center; padding: 0 16px; justify-content: space-between; border-bottom: 1px solid var(--divider); }
+  .appbar h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+  .appbar .icon-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .scroll-area { flex: 1; overflow-y: auto; padding: 20px 16px; }
+  .section-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .elder-card { background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .elder-card-header { display: flex; align-items: center; margin-bottom: 14px; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--primary); font-weight: 700; margin-right: 12px; flex-shrink: 0; }
+  .elder-info { flex: 1; }
+  .elder-info .name { font-size: 16px; font-weight: 700; color: var(--text); }
+  .elder-info .sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .rate { text-align: right; }
+  .rate .num { font-size: 22px; font-weight: 800; color: var(--success); }
+  .rate .label { font-size: 11px; color: var(--text2); }
+  .progress-bar { height: 6px; background: var(--divider); border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+  .progress-fill { height: 100%; background: var(--success); border-radius: 3px; }
+  .progress-label { font-size: 11px; color: var(--text2); }
+  .card-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .btn-outline { flex: 1; padding: 10px; border: 1.5px solid var(--divider); border-radius: 12px; background: #fff; color: var(--text2); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .btn-filled { flex: 1; padding: 10px; border: none; border-radius: 12px; background: var(--primary); color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 4px; font-weight: 600; }
+  .fab { position: absolute; bottom: 24px; right: 20px; background: var(--primary); color: #fff; border-radius: 28px; padding: 14px 20px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 16px rgba(76,175,130,0.4); }
+
+  /* ── 长辈首页 ── */
+  .elder-home { background: var(--bg); height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+  .elder-hero { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 32px 24px 28px; }
+  .elder-hero .greeting { color: #fff; font-size: 26px; font-weight: 700; }
+  .elder-hero .date { color: rgba(255,255,255,0.75); font-size: 16px; margin-top: 6px; }
+  .alert-pill { background: rgba(255,255,255,0.2); border-radius: 14px; padding: 10px 16px; margin-top: 16px; color: #fff; font-size: 16px; font-weight: 600; }
+  .med-list { flex: 1; overflow-y: auto; padding: 20px 16px; }
+  .med-card { background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 1.5px solid rgba(76,175,130,0.2); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+  .med-card.confirmed { border-color: rgba(52,199,89,0.3); }
+  .med-time { font-size: 15px; color: var(--text2); font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+  .badge-confirmed { background: rgba(52,199,89,0.12); color: var(--success); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .med-name { font-size: 28px; font-weight: 800; color: var(--text); margin: 10px 0 6px; }
+  .med-detail { font-size: 16px; color: var(--text2); }
+  .btn-confirm { width: 100%; height: 64px; background: var(--primary); border: none; border-radius: 16px; color: #fff; font-size: 20px; font-weight: 700; margin-top: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+  /* ── 添加计划页 ── */
+  .add-plan { background: var(--bg); height: 100%; display: flex; flex-direction: column; }
+  .add-plan .scroll-area { flex: 1; overflow-y: auto; }
+  .form-section { background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 12px; }
+  .form-section h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .form-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--divider); }
+  .form-row:last-child { border-bottom: none; }
+  .form-label { font-size: 15px; color: var(--text); }
+  .form-value { font-size: 15px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+  .time-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+  .chip.active { background: var(--primary); color: #fff; }
+  .chip.inactive { background: var(--bg); color: var(--text2); }
+  .btn-bottom { margin: 16px; }
+
+  .nav-back { color: var(--primary); font-size: 16px; }
+</style>
+</head>
+<body>
+
+<!-- 登录页 -->
+<div>
+<div class="phone">
+  <div class="status-bar" style="background: linear-gradient(160deg, #4CAF82, #388E5E); color: white;">
+    <span>9:41</span><span>●●●</span>
+  </div>
+  <div class="login-page" style="margin-top: -44px;">
+    <div class="login-hero" style="padding-top: 80px;">
+      <div class="app-icon">💊</div>
+      <h1>亲声药铃</h1>
+      <p>让爱的声音守护健康</p>
+    </div>
+    <div class="login-form">
+      <div class="input-group">
+        <label>手机号</label>
+        <input type="text" placeholder="请输入手机号" value="138****0001">
+      </div>
+      <div class="input-group">
+        <label>密码</label>
+        <input type="password" placeholder="请输入密码" value="••••••••">
+      </div>
+      <button class="btn-primary">登 录</button>
+      <div class="link-text">还没有账号？<span>立即注册</span></div>
+      <div style="margin-top: 32px; text-align: center; color: var(--hint); font-size: 12px;">
+        角色选择：<span style="color: var(--primary); font-weight: 600;">子女端</span> · 长辈端
+      </div>
+    </div>
+  </div>
+</div>
+<div class="phone-label">登录页</div>
+</div>
+
+<!-- 子女首页 -->
+<div>
+<div class="phone" style="position: relative;">
+  <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+  <div class="child-home" style="height: calc(100% - 44px);">
+    <div class="appbar">
+      <h2>亲声药铃</h2>
+      <div class="icon-btn">👤</div>
+    </div>
+    <div class="scroll-area">
+      <div class="section-title">我关注的家人</div>
+
+      <!-- 长辈卡片 1 -->
+      <div class="elder-card">
+        <div class="elder-card-header">
+          <div class="avatar">妈</div>
+          <div class="elder-info">
+            <div class="name">王桂芳</div>
+            <div class="sub">我的妈</div>
+          </div>
+          <div class="rate">
+            <div class="num">100%</div>
+            <div class="label">今日服药</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="progress-label">今日 2/2 次已服用</div>
+        <div class="card-actions">
+          <div class="btn-outline">📋 服药记录</div>
+          <div class="btn-filled">＋ 添加用药</div>
+        </div>
+      </div>
+
+      <!-- 长辈卡片 2 -->
+      <div class="elder-card">
+        <div class="elder-card-header">
+          <div class="avatar">爸</div>
+          <div class="elder-info">
+            <div class="name">李建国</div>
+            <div class="sub">我的爸</div>
+          </div>
+          <div class="rate">
+            <div class="num" style="color: var(--warning);">50%</div>
+            <div class="label">今日服药</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:50%; background: var(--warning);"></div></div>
+        <div class="progress-label">今日 1/2 次已服用</div>
+        <div class="card-actions">
+          <div class="btn-outline">📋 服药记录</div>
+          <div class="btn-filled">＋ 添加用药</div>
+        </div>
+      </div>
+    </div>
+    <div class="fab">＋ 添加家人</div>
+  </div>
+</div>
+<div class="phone-label">子女首页</div>
+</div>
+
+<!-- 长辈首页 -->
+<div>
+<div class="phone">
+  <div class="status-bar" style="background: linear-gradient(135deg, #4CAF82, #388E5E); color: white;">
+    <span>9:41</span><span>●●●</span>
+  </div>
+  <div class="elder-home" style="height: calc(100% - 44px);">
+    <div class="elder-hero">
+      <div class="greeting">早上好，王叔叔</div>
+      <div class="date">3月9日 星期一</div>
+      <div class="alert-pill">💊 今天还有 1 次药没吃</div>
+    </div>
+    <div class="med-list">
+      <!-- 已服用 -->
+      <div class="med-card confirmed">
+        <div class="med-time">
+          <span>⏰ 08:00</span>
+          <span class="badge-confirmed">✅ 已服用</span>
+        </div>
+        <div class="med-name">降压药</div>
+        <div class="med-detail">1片 · 饭后服用</div>
+      </div>
+      <!-- 未服用 -->
+      <div class="med-card">
+        <div class="med-time"><span>⏰ 20:00</span></div>
+        <div class="med-name">降压药</div>
+        <div class="med-detail">1片 · 饭后服用</div>
+        <button class="btn-confirm">我已吃药 ✅</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="phone-label">长辈首页</div>
+</div>
+
+<!-- 添加用药计划 -->
+<div>
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+  <div class="add-plan" style="height: calc(100% - 44px);">
+    <div class="appbar">
+      <span class="nav-back">‹ 返回</span>
+      <h2 style="font-size: 16px;">添加用药计划</h2>
+      <span style="width: 40px;"></span>
+    </div>
+    <div class="scroll-area" style="padding: 16px;">
+      <div style="background: var(--primary-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; font-size: 14px; color: var(--primary);">
+        🎙️ 语音输入：说出用药信息，AI 自动识别
+      </div>
+      <div style="width: 100%; height: 56px; background: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 20px;">
+        🎙 长按说话
+      </div>
+
+      <div class="form-section">
+        <h3>药品信息</h3>
+        <div class="form-row">
+          <span class="form-label">药品名称</span>
+          <span class="form-value">降压药 ›</span>
+        </div>
+        <div class="form-row">
+          <span class="form-label">每次剂量</span>
+          <span class="form-value">1片 ›</span>
+        </div>
+        <div class="form-row">
+          <span class="form-label">餐前/餐后</span>
+          <span class="form-value">饭后 ›</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>服药时间</h3>
+        <div class="time-chips">
+          <div class="chip active">08:00</div>
+          <div class="chip active">20:00</div>
+          <div class="chip inactive">＋ 添加</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>服药周期</h3>
+        <div class="form-row">
+          <span class="form-label">开始日期</span>
+          <span class="form-value">2026-03-09 ›</span>
+        </div>
+        <div class="form-row">
+          <span class="form-label">疗程天数</span>
+          <span class="form-value">长期 ›</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="margin-bottom: 32px;">保存用药计划</button>
+    </div>
+  </div>
+</div>
+<div class="phone-label">添加用药计划</div>
+</div>
+
+</body>
+</html>
